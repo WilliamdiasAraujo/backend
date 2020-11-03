@@ -14,9 +14,9 @@ class EmployeePresenceController {
    * @param {object} ctx
    * @param {Request} ctx.request
    */
-  async index({ params }) {
+  async index({ params, request }) {
     // TODO: | DOING: pagination
-    // const page = request.get().page || 1
+    const query = request.get();
     const userId = params.userId;
     const team = await Team.find(params.teamId);
     const user = await team.users().where("user_id", "=", userId).first();
