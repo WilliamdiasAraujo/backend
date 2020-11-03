@@ -17,7 +17,7 @@
 const Route = use("Route");
 
 Route.get("/", () => {
-  return { greeting: "Hello world in JSON" };
+  return { greeting: "Hello world in JSON and it worked!" };
 });
 
 Route.post("/register", "UserController.store"); //DONE
@@ -59,6 +59,10 @@ Route.group(() => {
     "/teams/:teamId/employees/:userId",
     "EmployeePresenceController.index"
   ).middleware(["owner:team", "teamType:business"]); //DOING: DONE BUT TODO: query filters
+  Route.get(
+    "/teams/:teamId/employees-presences/auth",
+    "EmployeePresenceController.auth"
+  ).middleware(["teamType:business"]); //DOING: DONE BUT TODO: query filters
   Route.post(
     "/teams/:teamId/employee-presences",
     "EmployeePresenceController.store"

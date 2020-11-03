@@ -12,7 +12,11 @@ const User = use("App/Models/User");
 class InvitationController {
   async auth({ auth }) {
     const user = auth.user;
-    return await user.invitations().where({ status: "pending" }).fetch();
+    return await user
+      .invitations()
+      .where({ status: "pending" })
+      .with("team")
+      .fetch();
   }
   async team({ params }) {
     const team = await Team.find(params.teamId);

@@ -15,6 +15,8 @@ class EmployeePresenceController {
    * @param {Request} ctx.request
    */
   async index({ params }) {
+    // TODO: | DOING: pagination
+    // const page = request.get().page || 1
     const userId = params.userId;
     const team = await Team.find(params.teamId);
     const user = await team.users().where("user_id", "=", userId).first();
@@ -26,15 +28,30 @@ class EmployeePresenceController {
     // const threeMonthsAfterStr = format(threeMonthsAfter, "yyyy-MM-dd");
     // const { from = threeMonthsAfterStr, to = nowStr } = request.get();
 
-    await user.load("employeePresences", (b) =>
+    const employeePresences = user.employeePresences((b) =>
       b.where("team_id", "=", params.teamId)
     );
-    return user.getRelated("employeePresences");
+    return await employeePresences.paginate(
+      query.page || 1,
+      query.perPage || 50
+    );
     // .fetch();
     // .where("ended_at", ">=", from)
     // .where("started_at", "<=", to)
     // .where("user", auth.user.id)
     // .fetch();
+  }
+
+  async auth({ request, params, auth }) {
+    const query = request.get();
+    const user = auth.user;
+    const employeePresences = user.employeePresences((b) =>
+      b.where("team_id", "=", params.teamId)
+    );
+    return await employeePresences.paginate(
+      query.page || 1,
+      query.perPage || 50
+    );
   }
 
   /**
