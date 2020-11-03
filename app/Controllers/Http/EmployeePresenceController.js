@@ -28,9 +28,9 @@ class EmployeePresenceController {
     // const threeMonthsAfterStr = format(threeMonthsAfter, "yyyy-MM-dd");
     // const { from = threeMonthsAfterStr, to = nowStr } = request.get();
 
-    const employeePresences = user.employeePresences((b) =>
-      b.where("team_id", "=", params.teamId).orderBy("started_at", "desc")
-    );
+    const employeePresences = user
+      .employeePresences((b) => b.where("team_id", "=", params.teamId))
+      .orderBy("started_at", "desc");
     return await employeePresences.paginate(
       query.page || 1,
       query.perPage || 50
@@ -45,9 +45,9 @@ class EmployeePresenceController {
   async auth({ request, params, auth }) {
     const query = request.get();
     const user = auth.user;
-    const employeePresences = user.employeePresences((b) =>
-      b.where("team_id", "=", params.teamId).orderBy("started_at", "desc")
-    );
+    const employeePresences = user
+      .employeePresences((b) => b.where("team_id", "=", params.teamId))
+      .orderBy("started_at", "desc");
     return await employeePresences.paginate(
       query.page || 1,
       query.perPage || 50
