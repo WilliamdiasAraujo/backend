@@ -60,6 +60,11 @@ class EmployeePresenceController {
    */
   async store({ request, auth, params }) {
     const data = request.only(["started_at", "finished_at"]);
+    data.started_at = format(new Date(data.started_at), "yyyy-MM-dd HH:mm:ss");
+    data.finished_at = format(
+      new Date(data.finished_at),
+      "yyyy-MM-dd HH:mm:ss"
+    );
     const user = auth.user;
     const team = await user
       .teams()
