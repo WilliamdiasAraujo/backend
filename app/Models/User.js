@@ -55,6 +55,10 @@ class User extends Model {
     return this.hasMany("App/Models/StudentPresence");
   }
 
+  schoolLists () {
+    return this.manyThrough('App/Models/StudentPresence', 'schoolList')
+  }
+
   employeePresences() {
     return this.hasMany("App/Models/EmployeePresence");
   }

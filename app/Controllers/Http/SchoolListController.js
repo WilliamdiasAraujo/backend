@@ -5,10 +5,40 @@
 
 const SchoolList = use("App/Models/SchoolList");
 const Team = use("App/Models/Team");
+const User = use("App/Models/User");
+
+const format = require("date-fns/format");
+const formatISO = require("date-fns/formatISO");
+const fromUnixTime = require("date-fns/fromUnixTime");
 
 class SchoolListController {
-  async index({ params }) {
-    return await SchoolList.query().where({ team_id: params.teamId }).fetch();
+  async index({ params, request }) {
+    const query = request.get()
+    return await SchoolList.query().where({ team_id: params.teamId }).orderBy('date_time', 'desc').paginate(
+      query.page || 1,
+      query.perPage || 30
+    );
+  }
+
+  async studentPresences({ params, request }) {
+    const query = request.get()
+    const min = formatISO(fromUnixTime(0))
+    const max = formatISO(new Date('9999-12-31'))
+    const { from = min, to = max } = query;
+    const user = await User.find(params.userId);
+    const presences = user.schoolLists(
+      (b) => b.where("id", ">", 0)
+      )
+    .where("date_time", ">=", from)
+    .where("date_time", "<=", to)
+    .orderBy("date_time", "desc")
+    .with("studentPresences", (b) => {
+      b.where("user_id", "=", params.userId)
+    });
+    return await presences.paginate(
+      query.page || 1,
+      query.perPage || 50
+    );
   }
 
   /**

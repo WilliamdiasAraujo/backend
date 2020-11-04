@@ -48,7 +48,12 @@ Route.group(() => {
   Route.get(
     "/school-list/:schoolListId",
     "SchoolListController.show"
-  ).middleware(["owner:team", "teamType:school"]); //DONE
+  )
+  // .middleware(["owner:team", "teamType:school"]); //DONE
+  Route.get(
+    "teams/:teamId/student-presences/:userId",
+    "SchoolListController.studentPresences"
+  );
   Route.delete(
     "/school-list/:schoolListId",
     "SchoolListController.destroy"
