@@ -74,7 +74,13 @@ class SchoolListController {
   async show({ params }) {
     const schoolList = await SchoolList.find(params.schoolListId);
 
-    await schoolList.load("studentPresences");
+    await schoolList.loadMany({
+      studentPresences: null,
+      'studentPresences.user': null
+    });
+
+    // const a = await schoolList.studentPresences(b => b.user()).fetch();
+    // console.log({ a: a.toJSON() })
     return schoolList;
   }
 
