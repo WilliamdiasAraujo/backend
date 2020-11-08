@@ -27,12 +27,14 @@ class SchoolListController {
     const { from = min, to = max } = query;
     const user = await User.find(params.userId);
     const presences = user.schoolLists()
-    .where("date_time", ">=", from)
-    .andWhere("date_time", "<=", to)
+    .whereBetween("date_time", [from, to])
+    // .where("date_time", ">=", from)
+    // .andWhere("date_time", "<=", to)
     .orderBy("date_time", "asc")
     .with("studentPresences", (b) => {
       b.where("user_id", "=", params.userId)
     });
+    return { to, from };
     return await presences.paginate(
       query.page || 1,
       query.perPage || 50
