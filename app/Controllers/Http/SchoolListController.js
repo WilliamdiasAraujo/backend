@@ -26,12 +26,10 @@ class SchoolListController {
     const max = formatISO(new Date('9999-12-31'))
     const { from = min, to = max } = query;
     const user = await User.find(params.userId);
-    const presences = user.schoolLists(
-      (b) => b.where("id", ">", 0)
-      )
+    const presences = user.schoolLists()
     .where("date_time", ">=", from)
     .andWhere("date_time", "<=", to)
-    .orderBy("date_time", "desc")
+    .orderBy("date_time", "asc")
     .with("studentPresences", (b) => {
       b.where("user_id", "=", params.userId)
     });
