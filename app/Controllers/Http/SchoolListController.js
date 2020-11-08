@@ -34,7 +34,7 @@ class SchoolListController {
     .with("studentPresences", (b) => {
       b.where("user_id", "=", params.userId)
     });
-    return { to, from };
+    // return { to, from };
     return await presences.paginate(
       query.page || 1,
       query.perPage || 50
