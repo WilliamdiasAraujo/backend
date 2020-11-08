@@ -30,7 +30,7 @@ class SchoolListController {
       (b) => b.where("id", ">", 0)
       )
     .where("date_time", ">=", from)
-    .where("date_time", "<=", to)
+    .andWhere("date_time", "<=", to)
     .orderBy("date_time", "desc")
     .with("studentPresences", (b) => {
       b.where("user_id", "=", params.userId)
