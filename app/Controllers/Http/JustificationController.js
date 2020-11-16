@@ -14,7 +14,7 @@ class JustificationController {
   async index({ request, params }) {
     const query = request.get();
     const team = await Team.find(params.teamId);
-    const justifications = team.justifications().with("user");
+    const justifications = team.justifications().with("user").with("team");
     return await justifications.paginate(
       query.page || 1,
       query.perPage || 20
@@ -24,7 +24,7 @@ class JustificationController {
   async auth({ request }) {
     const query = request.get();
     const user = auth.user;
-    const justifications = user.justifications().with("user")
+    const justifications = user.justifications().with("user").with("team");
     // .fetch();
     // return justifications;
     return await justifications.paginate(

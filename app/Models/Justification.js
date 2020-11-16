@@ -8,7 +8,7 @@ class Justification extends Model {
     return this.belongsTo("App/Models/User");
   }
 
-  teams() {
+  team() {
     return this.belongsTo("App/Models/Team");
   }
 }
