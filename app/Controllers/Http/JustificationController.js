@@ -11,10 +11,14 @@ const Team = use("App/Models/Team");
 const Env = use("Env");
 
 class JustificationController {
-  async index({ params }) {
+  async index({ request, params }) {
+    const query = request.get();
     const team = await Team.find(params.teamId);
-    const justifications = await team.justifications().with("user").fetch();
-    return justifications;
+    const justifications = team.justifications().with("user");
+    return await justifications.paginate(
+      query.page || 1,
+      query.perPage || 20
+    );
   }
 
   async auth({ request }) {
