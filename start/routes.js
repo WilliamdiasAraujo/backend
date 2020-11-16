@@ -88,6 +88,11 @@ Route.group(() => {
     "/teams/:teamId/justifications",
     "JustificationController.index"
   ).middleware(["owner:team"]); //  admin, owner
+  Route.get(
+    "/justifications/auth",
+    "JustificationController.auth"
+  )
+  // .middleware(["owner:team"]); //  admin, owner
   Route.post("/teams/:teamId/justifications", "JustificationController.store");
   Route.get(
     "/justifications/:justificationId/accept",

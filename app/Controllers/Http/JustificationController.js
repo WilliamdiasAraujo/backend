@@ -17,6 +17,20 @@ class JustificationController {
     return justifications;
   }
 
+  async auth({ request }) {
+    const query = request.get();
+    const user = auth.user;
+    const justifications = user.justifications().with("user")
+    // .fetch();
+    // return justifications;
+    return await justifications.paginate(
+      query.page || 1,
+      query.perPage || 20
+    );
+  }
+
+  
+
   async store({ request, response, auth, params }) {
     const user = auth.user;
     const data = request.only(["message"]);
@@ -24,17 +38,22 @@ class JustificationController {
       types: ["image"],
       size: "10mb",
     });
-    const filePath = `uploads/user/${user.id}`;
-    const fileName = `justification-${new Date().getTime()}.${file.subtype}`;
-    await file.move(Helpers.tmpPath(filePath), {
-      name: fileName,
-      overwrite: true,
-    });
-    if (!file.moved()) {
-      response.send({ error: file.error });
-    }
 
-    const media_url = `${Env.get("APP_URL")}/${filePath}/${file.fileName}`;
+    let media_url = undefined;
+
+    if(file) {
+      const filePath = `uploads/user/${user.id}`;
+      const fileName = `justification-${new Date().getTime()}.${file.subtype}`;
+      await file.move(Helpers.tmpPath(filePath), {
+        name: fileName,
+        overwrite: true,
+      });
+      if (!file.moved()) {
+        response.send({ error: file.error });
+      }
+  
+      media_url = `${Env.get("APP_URL")}/${filePath}/${file.fileName}`;
+    }
     const team = await Team.find(params.teamId);
     return await team
       .justifications()
