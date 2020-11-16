@@ -21,7 +21,7 @@ class JustificationController {
     );
   }
 
-  async auth({ request }) {
+  async auth({ request, auth }) {
     const query = request.get();
     const user = auth.user;
     const justifications = user.justifications().with("user").with("team");
