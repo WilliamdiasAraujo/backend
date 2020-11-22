@@ -21,10 +21,11 @@ class JustificationController {
     );
   }
 
-  async auth({ request, auth }) {
+  async auth({ request, auth, params }) {
     const query = request.get();
     const user = auth.user;
-    const justifications = user.justifications().with("user").with("team");
+    const teamId = params.teamId;
+    const justifications = user.justifications().where('team_id', "=", teamId).with("user").with("team");
     // .fetch();
     // return justifications;
     return await justifications.paginate(
