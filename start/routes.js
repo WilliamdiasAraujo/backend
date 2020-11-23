@@ -97,9 +97,11 @@ Route.group(() => {
   Route.get(
     "/justifications/:justificationId/accept",
     "JustificationController.accept"
-  ).middleware(["owner:team"]); // admin, owner:team
+  )
+  // .middleware(["owner:team"]); // admin, owner:team
   Route.get(
     "/justifications/:justificationId/deny",
     "JustificationController.deny"
-  ).middleware(["owner:team"]); // admin, owner:team
+  )
+  // .middleware(["owner:team"]); // admin, owner:team
 }).middleware("auth");
