@@ -21,6 +21,13 @@ class JustificationController {
     );
   }
 
+  async teamCount({ params }) {
+    // const query = request.get();
+    const team = await Team.find(params.teamId);
+    const justifications = team.justifications().where({ status: "pending" });
+    return await justifications.count()
+  }
+
   async auth({ request, auth, params }) {
     const query = request.get();
     const user = auth.user;

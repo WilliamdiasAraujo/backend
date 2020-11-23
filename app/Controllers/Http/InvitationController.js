@@ -18,10 +18,19 @@ class InvitationController {
       .with("team")
       .fetch();
   }
+  async authCount({ auth }) {
+    const user = auth.user;
+    return await user
+      .invitations()
+      .where({ status: "pending" })
+      .count();
+  }
+
   async team({ params }) {
     const team = await Team.find(params.teamId);
     return await team.invitations().fetch();
   }
+
 
   async store({ request, params, auth, response }) {
     const data = request.only(["message", "email"]);

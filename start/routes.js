@@ -75,6 +75,7 @@ Route.group(() => {
 
   // INVITATIONS
   Route.get("/invitations/auth", "InvitationController.auth"); //DONE
+  Route.get("/invitations/auth/count", "InvitationController.authCount"); //DONE
   Route.get(
     "/teams/:teamId/invitations",
     "InvitationController.team"
@@ -87,7 +88,11 @@ Route.group(() => {
   Route.get(
     "/teams/:teamId/justifications",
     "JustificationController.index"
-  ).middleware(["owner:team"]); //  admin, owner
+    ).middleware(["owner:team"]); //  admin, owner
+    Route.get(
+      "/teams/:teamId/justifications/count", 
+      "JustificationController.teamCount"
+    ).middleware(["owner:team"]);
   Route.get(
     "/teams/:teamId/justifications/auth",
     "JustificationController.auth"
