@@ -33,6 +33,7 @@ module.exports = {
       pass: Env.get("MAIL_PASSWORD"),
     },
     tls: {
+      ciphers: "SSLv3",
       // do not fail on invalid certs
       rejectUnauthorized: false,
     },
