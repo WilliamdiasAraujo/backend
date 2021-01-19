@@ -25,17 +25,12 @@ module.exports = {
   smtp: {
     driver: "smtp",
     pool: true,
-    port: Env.get("SMTP_PORT", 2525),
+    port: 465,
     host: Env.get("SMTP_HOST"),
-    secure: true,
+    secure: false,
     auth: {
       user: Env.get("MAIL_USERNAME"),
       pass: Env.get("MAIL_PASSWORD"),
-    },
-    tls: {
-      ciphers: "SSLv3",
-      // do not fail on invalid certs
-      rejectUnauthorized: false,
     },
     maxConnections: 5,
     maxMessages: 100,
