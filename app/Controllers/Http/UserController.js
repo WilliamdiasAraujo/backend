@@ -36,7 +36,7 @@ class UserController {
     }
   }
 
-  async forgot({ request }) {
+  async forgot({ request, response }) {
     const { email } = request.only(["email"]);
     // console.log("bo");
     const user = await User.query().where("email", "=", email).first();
@@ -63,7 +63,7 @@ class UserController {
     }
   }
 
-  async changePassword({ request }) {
+  async changePassword({ request, response }) {
     const { email, confirmation_code, new_password } = request.only([
       "confirmation_code",
       "email",
