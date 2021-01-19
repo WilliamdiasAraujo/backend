@@ -51,15 +51,12 @@ class UserController {
 
     try {
       await Mail.send("emails.forgot", user.toJSON(), (message) => {
-        console.log("start");
         message
-          // .to(user.email)
-          .to("hebertoliveira@infojr.com.br")
+          .to(user.email)
+          // .to("hebertoliveira@infojr.com.br")
           .from(Env.get("MAIL_USERNAME", ""))
-          .subject("Welcome to yardstick");
-        console.log("end");
+          .subject("Atualização de Senha");
       });
-      console.log("end!");
       return { msg: "send" };
     } catch (err) {
       console.log({ err });
