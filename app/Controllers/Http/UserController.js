@@ -63,6 +63,7 @@ class UserController {
       return { msg: "send" };
     } catch (err) {
       console.log({ err });
+      return { err };
     }
   }
 
