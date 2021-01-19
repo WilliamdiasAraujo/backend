@@ -32,6 +32,10 @@ module.exports = {
       user: Env.get("MAIL_USERNAME"),
       pass: Env.get("MAIL_PASSWORD"),
     },
+    tls: {
+      // do not fail on invalid certs
+      rejectUnauthorized: false,
+    },
     maxConnections: 5,
     maxMessages: 100,
     rateLimit: 10,
