@@ -8,7 +8,7 @@ const Hash = use("Hash");
 
 class User extends Model {
   static get hidden() {
-    return ["password"];
+    return ["password", "confirmation_code"];
   }
 
   static boot() {
@@ -55,8 +55,8 @@ class User extends Model {
     return this.hasMany("App/Models/StudentPresence");
   }
 
-  schoolLists () {
-    return this.manyThrough('App/Models/StudentPresence', 'schoolList')
+  schoolLists() {
+    return this.manyThrough("App/Models/StudentPresence", "schoolList");
   }
 
   employeePresences() {

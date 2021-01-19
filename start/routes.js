@@ -20,6 +20,15 @@ Route.get("/", () => {
   return { greeting: "Hello world in JSON and it worked!" };
 });
 
+Route.post("users/forgot", "UserController.forgot");
+/*
+ ^^^ { email: string }
+*/
+Route.post("users/change", "UserController.changePassword");
+/*
+ ^^^ { email: string, new_password: string, confirmation_code: string }
+*/
+
 Route.post("/register", "UserController.store"); //DONE
 Route.post("/login", "UserController.login"); //DONE
 
@@ -45,10 +54,7 @@ Route.group(() => {
     "/teams/:teamId/school-list",
     "SchoolListController.store"
   ).middleware(["owner:team", "teamType:school"]); //DONE
-  Route.get(
-    "/school-list/:schoolListId",
-    "SchoolListController.show"
-  )
+  Route.get("/school-list/:schoolListId", "SchoolListController.show");
   // .middleware(["owner:team", "teamType:school"]); //DONE
   Route.get(
     "teams/:teamId/student-presences/:userId",
@@ -88,25 +94,25 @@ Route.group(() => {
   Route.get(
     "/teams/:teamId/justifications",
     "JustificationController.index"
-    ).middleware(["owner:team"]); //  admin, owner
-    Route.get(
-      "/teams/:teamId/justifications/count", 
-      "JustificationController.teamCount"
-    ).middleware(["owner:team"]);
+  ).middleware(["owner:team"]); //  admin, owner
+  Route.get(
+    "/teams/:teamId/justifications/count",
+    "JustificationController.teamCount"
+  ).middleware(["owner:team"]);
   Route.get(
     "/teams/:teamId/justifications/auth",
     "JustificationController.auth"
-  )
+  );
   // .middleware(["owner:team"]); //  admin, owner
   Route.post("/teams/:teamId/justifications", "JustificationController.store");
   Route.get(
     "/justifications/:justificationId/accept",
     "JustificationController.accept"
-  )
+  );
   // .middleware(["owner:team"]); // admin, owner:team
   Route.get(
     "/justifications/:justificationId/deny",
     "JustificationController.deny"
-  )
+  );
   // .middleware(["owner:team"]); // admin, owner:team
 }).middleware("auth");
