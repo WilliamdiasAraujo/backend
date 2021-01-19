@@ -50,13 +50,16 @@ class UserController {
     await user.save();
 
     try {
-      await Mail.send("emails.forgot", user.toJSON(), (message) => {
-        message
-          .to(user.email)
-          // .to("hebertoliveira@infojr.com.br")
-          .from(Env.get("MAIL_USERNAME", ""))
-          .subject("Atualização de Senha");
-      });
+      await Mail.send(
+        "emails.forgot",
+        { name: user.name, confirmation_code: randomNumber },
+        (message) => {
+          message
+            .to(user.email)
+            .from(Env.get("MAIL_USERNAME", ""))
+            .subject("Atualização de Senha");
+        }
+      );
       return { msg: "send" };
     } catch (err) {
       console.log({ err });
