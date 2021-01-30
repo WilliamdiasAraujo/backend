@@ -11,8 +11,18 @@ class TeamController {
 
     const user = await User.find(owner_id);
 
-    let teams = await user.teams().with("owner").fetch();
-    let createdTeams = await user.createdTeams().with("users").fetch();
+    let teams = await user
+      .teams()
+      .with("owner")
+      .with("usersRelation", (builder) => {
+        builder.where("user_id", owner_id);
+      })
+      .fetch();
+    let createdTeams = await user
+      .createdTeams()
+      .with("users")
+      .with("usersRelation")
+      .fetch();
     return this.mergeTeams(createdTeams, teams);
   }
 
@@ -23,7 +33,7 @@ class TeamController {
 
   async store({ request, auth }) {
     const { id: owner_id } = auth.user;
-    const data = request.only(["name", "type", "address"]); //type = 'school' | 'business'
+    const data = request.only(["name", "type", "address", "duration"]); //type = 'school' | 'business'
 
     const team = await Team.create({ ...data, owner_id });
     return team;
@@ -32,7 +42,7 @@ class TeamController {
   // async show({ request, auth }) {}
 
   async update({ request, response, params }) {
-    const data = request.only(["name", "adress"]);
+    const data = request.only(["name", "adress", "duration"]);
     const team = await Team.find(params.teamId);
 
     if (!team) {

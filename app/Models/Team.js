@@ -20,6 +20,10 @@ class Team extends Model {
     return this.belongsToMany("App/Models/User");
   }
 
+  usersRelation() {
+    return this.hasMany("App/Models/TeamUser");
+  }
+
   studentPresences() {
     return this.manyThrough("App/Models/SchoolList", "studentPresences");
   }

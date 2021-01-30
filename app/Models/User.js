@@ -47,6 +47,10 @@ class User extends Model {
     return this.belongsToMany("App/Models/Team");
   }
 
+  teamsRelation() {
+    return this.hasMany("App/Models/TeamUser");
+  }
+
   createdTeams() {
     return this.hasMany("App/Models/Team", "id", "owner_id");
   }
