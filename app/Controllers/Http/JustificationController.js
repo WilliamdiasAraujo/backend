@@ -7,6 +7,7 @@
 const Helpers = use("Helpers");
 const Justification = use("App/Models/Justification");
 const Team = use("App/Models/Team");
+const SchoolList = use("App/Models/SchoolList");
 /** @type {import('@adonisjs/framework/src/Env')} */
 const Env = use("Env");
 
@@ -15,33 +16,29 @@ class JustificationController {
     const query = request.get();
     const team = await Team.find(params.teamId);
     const justifications = team.justifications().with("user").with("team");
-    return await justifications.paginate(
-      query.page || 1,
-      query.perPage || 20
-    );
+    return await justifications.paginate(query.page || 1, query.perPage || 20);
   }
 
   async teamCount({ params }) {
     // const query = request.get();
     const team = await Team.find(params.teamId);
     const justifications = team.justifications().where({ status: "pending" });
-    return await justifications.count()
+    return await justifications.count();
   }
 
   async auth({ request, auth, params }) {
     const query = request.get();
     const user = auth.user;
     const teamId = params.teamId;
-    const justifications = user.justifications().where('team_id', "=", teamId).with("user").with("team");
+    const justifications = user
+      .justifications()
+      .where("team_id", "=", teamId)
+      .with("user")
+      .with("team");
     // .fetch();
     // return justifications;
-    return await justifications.paginate(
-      query.page || 1,
-      query.perPage || 20
-    );
+    return await justifications.paginate(query.page || 1, query.perPage || 20);
   }
-
-  
 
   async store({ request, response, auth, params }) {
     const user = auth.user;
@@ -53,7 +50,7 @@ class JustificationController {
 
     let media_url = undefined;
 
-    if(file) {
+    if (file) {
       const filePath = `uploads/user/${user.id}`;
       const fileName = `justification-${new Date().getTime()}.${file.subtype}`;
       await file.move(Helpers.tmpPath(filePath), {
@@ -63,7 +60,7 @@ class JustificationController {
       if (!file.moved()) {
         response.send({ error: file.error });
       }
-  
+
       media_url = `${Env.get("APP_URL")}/${filePath}/${file.fileName}`;
     }
     const team = await Team.find(params.teamId);
@@ -79,9 +76,21 @@ class JustificationController {
    */
 
   async accept({ params }) {
+    // const user = auth.user;
     const justification = await Justification.find(params.justificationId);
     justification.merge({ status: "accepted" });
     await justification.save();
+    if (justification.started_at && justification.finished_at) {
+      const teamId = justification.team_id;
+      const schoolLists = await SchoolList.query()
+        .where("team_id", "=", teamId)
+        .andWhere("datetime", ">=", justification.started_at)
+        .andWhere("datetime", "<=", justification.finished_at);
+      const schoolListIds = schoolLists.rows.map((sl) => sl.id);
+      await StudentPresence.whereIn("id", schoolListIds).update({
+        is_justified: true,
+      });
+    }
     return justification;
   }
 
