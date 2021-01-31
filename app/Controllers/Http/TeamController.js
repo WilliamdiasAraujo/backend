@@ -1,5 +1,6 @@
 const Team = use("App/Models/Team");
 const User = use("App/Models/User");
+const TeamUser = use("App/Models/TeamUser");
 
 const format = require("date-fns/format");
 const add = require("date-fns/add");
@@ -64,6 +65,49 @@ class TeamController {
 
     await team.delete();
     return response.status(200).send({ message: "this item has deleted" });
+  }
+
+  async setWorkingHours({ request }) {
+    const teamId = request.params.teamId;
+    const userId = request.params.userId;
+    const { working_hours } = request.only(["working_hours"]);
+
+    if (!working_hours) {
+      return { msg: "Invalid 'working_hours' field" };
+    }
+
+    const teamUser = await TeamUser.query()
+      .where("user_id", "=", userId)
+      .andWhere("team_id", "=", teamId)
+      .update({
+        working_hours,
+      });
+    if (!teamUser) {
+      return { msg: "team-user relation doesn't exist" };
+    }
+    return { success: true };
+  }
+
+  async removeUser({ request }) {
+    const teamId = request.params.teamId;
+    const userId = request.params.userId;
+
+    if (!teamId || !userId) {
+      return { msg: "invalid teamId or userId" };
+    }
+
+    let team = await Team.find(teamId);
+    // return { team};
+    if (!team) {
+      return { msg: "team not found" };
+    }
+    await team.users().detach([userId]);
+    // team = await Team.query()
+    //   .with("users")
+    //   .with("usersRelation")
+    //   .where("id", "=", teamId)
+    //   .first();
+    return { success: true, team };
   }
 
   // async invitations({ request }) {

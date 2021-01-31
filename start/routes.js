@@ -44,6 +44,19 @@ Route.group(() => {
   Route.delete("/teams/:teamId", "TeamController.destroy").middleware(
     "owner:team"
   ); //DONE
+  Route.post(
+    "/teams/:teamId/set-working-hours/:userId",
+    "TeamController.setWorkingHours"
+  ).middleware("owner:team");
+  // ^^^{ working_hours: number }
+  // TODO: add in README
+
+  Route.put(
+    "/teams/:teamId/remove-user/:userId",
+    "TeamController.removeUser"
+  ).middleware("owner:team");
+  // ^^^{  }
+  // TODO: add in README
 
   // SCHOOL LIST
   Route.get(
@@ -64,6 +77,11 @@ Route.group(() => {
     "/school-list/:schoolListId",
     "SchoolListController.destroy"
   ).middleware(["owner:team", "teamType:school"]); //DONE
+
+  Route.get(
+    "/teams/:teamId/student-progess/:userId",
+    "SchoolListController.studentProgress"
+  ); // TODO: add in README
 
   // EMPLOYEE PRESENCES
   Route.get(
