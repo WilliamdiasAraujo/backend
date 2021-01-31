@@ -51,29 +51,25 @@ class SchoolListController {
         })
         .fetch()
     ).toJSON();
-    // const total = presences.reduce(
-    //   (acc = 0, cur) => acc + cur.total_class_amount * cur.class_duration
-    // );
     const team = await Team.find(params.teamId);
     const relative = !team.duration;
     let total = relative ? 0 : team.duration;
+    let total_class_duration = 0;
     let watched = 0;
     for (const presence of presences) {
-      // return { presence };
-      // const watched = presences.reduce((acc, cur) => {
       const totalDuration =
         presence.total_class_amount * presence.class_duration;
       if (relative) {
         total += totalDuration;
       }
+      total_class_duration += totalDuration;
       const userPresence = presence.studentPresences[0];
       const computed = presence.class_duration * userPresence.class_amount;
       watched += userPresence.is_justified ? totalDuration : computed;
-      // });
     }
     const progess =
       total == 0 || watched > total ? 100 : (watched / total) * 100;
-    return { progess, relative };
+    return { progess, relative, total, watched, total_class_duration };
   }
 
   /**
@@ -96,8 +92,6 @@ class SchoolListController {
         presence.class_amount > data.total_class_amount
           ? data.total_class_amount
           : presence.class_amount;
-      // presence.class_amount = presence.class_amount ?? 0;
-      console.log("b", presence.class_amount);
       return presence ? presence : { user_id: participant.id, class_amount: 0 };
     });
 
