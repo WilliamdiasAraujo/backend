@@ -81,6 +81,7 @@ class JustificationController {
     const justification = await Justification.find(params.justificationId);
     justification.merge({ status: "accepted" });
     let result = null;
+    let schoolListIds;
     if (justification.started_at && justification.finished_at) {
       const teamId = justification.team_id;
       const schoolLists = await SchoolList.query()
