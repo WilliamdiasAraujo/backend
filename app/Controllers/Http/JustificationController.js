@@ -42,7 +42,7 @@ class JustificationController {
 
   async store({ request, response, auth, params }) {
     const user = auth.user;
-    const data = request.only(["message"]);
+    const data = request.only(["message", "started_at", "finished_at"]);
     const file = request.file("media", {
       types: ["image"],
       size: "10mb",
