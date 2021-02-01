@@ -84,8 +84,8 @@ class JustificationController {
       const teamId = justification.team_id;
       const schoolLists = await SchoolList.query()
         .where("team_id", "=", teamId)
-        .andWhere("datetime", ">=", justification.started_at)
-        .andWhere("datetime", "<=", justification.finished_at)
+        .andWhere("date_time", ">=", justification.started_at)
+        .andWhere("date_time", "<=", justification.finished_at)
         .fetch();
       const schoolListIds = schoolLists.rows.map((sl) => sl.id);
       await StudentPresence.whereIn("id", schoolListIds).update({
