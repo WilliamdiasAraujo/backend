@@ -8,6 +8,7 @@ const Helpers = use("Helpers");
 const Justification = use("App/Models/Justification");
 const Team = use("App/Models/Team");
 const SchoolList = use("App/Models/SchoolList");
+const StudentPresence = use("App/Models/StudentPresence");
 /** @type {import('@adonisjs/framework/src/Env')} */
 const Env = use("Env");
 
@@ -79,7 +80,7 @@ class JustificationController {
     // const user = auth.user;
     const justification = await Justification.find(params.justificationId);
     justification.merge({ status: "accepted" });
-    await justification.save();
+
     if (justification.started_at && justification.finished_at) {
       const teamId = justification.team_id;
       const schoolLists = await SchoolList.query()
@@ -92,6 +93,7 @@ class JustificationController {
         is_justified: true,
       });
     }
+    await justification.save();
     return justification;
   }
 
