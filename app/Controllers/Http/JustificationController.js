@@ -89,7 +89,7 @@ class JustificationController {
         .andWhere("date_time", "<=", justification.finished_at)
         .fetch();
       const schoolListIds = schoolLists.rows.map((sl) => sl.id);
-      await StudentPresence.whereIn("id", schoolListIds).update({
+      await StudentPresence.query().whereIn("id", schoolListIds).update({
         is_justified: true,
       });
     }
