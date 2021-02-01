@@ -96,7 +96,7 @@ class JustificationController {
         });
     }
     await justification.save();
-    return { justification, result };
+    return { justification, result, schoolListIds };
   }
 
   /**
