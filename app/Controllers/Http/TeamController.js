@@ -43,7 +43,7 @@ class TeamController {
   // async show({ request, auth }) {}
 
   async update({ request, response, params }) {
-    const data = request.only(["name", "adress", "duration"]);
+    const data = request.only(["name", "address", "duration"]);
     const team = await Team.find(params.teamId);
 
     if (!team) {
