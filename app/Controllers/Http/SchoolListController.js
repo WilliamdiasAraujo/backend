@@ -22,6 +22,7 @@ class SchoolListController {
 
   async studentPresences({ params, request }) {
     const query = request.get();
+    const teamId = params.teamId;
     const min = formatISO(fromUnixTime(0));
     const max = formatISO(new Date("9999-12-31"));
     const { from = min, to = max } = query;
@@ -30,7 +31,7 @@ class SchoolListController {
       .schoolLists()
       .whereBetween("date_time", [from, to])
       // .where("date_time", ">=", from)
-      // .andWhere("date_time", "<=", to)
+      .andWhere("team_id", "=", teamId)
       .orderBy("date_time", "asc")
       .with("studentPresences", (b) => {
         b.where("user_id", "=", params.userId);
