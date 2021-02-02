@@ -91,11 +91,12 @@ class JustificationController {
         .andWhere("date_time", "<=", justification.finished_at)
         .fetch();
       schoolListIds = schoolLists.rows.map((sl) => sl.id);
+      await StudentPresence.query().whereIn("id", schoolListIds).update({
+        is_justified: true,
+      });
       result = await StudentPresence.query()
         .whereIn("id", schoolListIds)
-        .update({
-          is_justified: true,
-        });
+        .fetch();
     }
     await justification.save();
     return { justification, result, schoolLists, schoolListIds, teamId };
