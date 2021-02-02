@@ -95,7 +95,7 @@ class JustificationController {
         is_justified: true,
       });
       result = await StudentPresence.query()
-        .whereIn("id", schoolListIds)
+        .whereIn("school_list_id", schoolListIds)
         .fetch();
     }
     await justification.save();
