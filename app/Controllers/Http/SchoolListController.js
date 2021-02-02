@@ -53,7 +53,7 @@ class SchoolListController {
     ).toJSON();
     const team = await Team.find(params.teamId);
     const relative = !team.duration;
-    let total = relative ? 0 : team.duration;
+    let total = relative ? 0 : team.duration * 60;
     let total_class_duration = 0;
     let watched = 0;
     for (const presence of presences) {
