@@ -82,8 +82,8 @@ class JustificationController {
     justification.merge({ status: "accepted" });
     let result = null;
     let schoolListIds;
+    const teamId = justification.team_id;
     if (justification.started_at && justification.finished_at) {
-      const teamId = justification.team_id;
       const schoolLists = await SchoolList.query()
         .where("team_id", "=", teamId)
         .andWhere("date_time", ">=", justification.started_at)
@@ -97,7 +97,7 @@ class JustificationController {
         });
     }
     await justification.save();
-    return { justification, result, schoolListIds, teamId };
+    return { justification, result, schoolLists, schoolListIds, teamId };
   }
 
   /**
