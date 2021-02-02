@@ -83,7 +83,7 @@ class JustificationController {
     let result = null;
     let schoolListIds;
     const teamId = justification.team_id;
-    let schoolLists, schoolListIds;
+    let schoolLists;
     if (justification.started_at && justification.finished_at) {
       schoolLists = await SchoolList.query()
         .where("team_id", "=", teamId)
