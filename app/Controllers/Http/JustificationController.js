@@ -80,7 +80,6 @@ class JustificationController {
     // const user = auth.user;
     const justification = await Justification.find(params.justificationId);
     justification.merge({ status: "accepted" });
-    let result = null;
     let schoolListIds;
     const teamId = justification.team_id;
     let schoolLists;
@@ -97,14 +96,9 @@ class JustificationController {
         .update({
           is_justified: true,
         });
-
-      result = await StudentPresence.query()
-        .whereIn("school_list_id", schoolListIds)
-        .andWhere("user_id", "=", justification.user_id)
-        .fetch();
     }
     await justification.save();
-    return { justification, result, schoolLists, schoolListIds, teamId };
+    return { justification, schoolListIds };
   }
 
   /**
