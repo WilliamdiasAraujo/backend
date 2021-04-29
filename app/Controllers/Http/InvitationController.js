@@ -12,8 +12,17 @@ const User = use("App/Models/User");
 class InvitationController {
   async auth({ auth }) {
     const user = auth.user;
-    return await user.invitations().where({ status: "pending" }).fetch();
+    return await user
+      .invitations()
+      .where({ status: "pending" })
+      .with("team")
+      .fetch();
   }
+  async authCount({ auth }) {
+    const user = auth.user;
+    return await user.invitations().where({ status: "pending" }).count();
+  }
+
   async team({ params }) {
     const team = await Team.find(params.teamId);
     return await team.invitations().fetch();
@@ -30,6 +39,13 @@ class InvitationController {
     }
 
     const targetUser = await User.query().where({ email: data.email }).first();
+
+    if (!targetUser) {
+      return response
+        .status(400)
+        .send({ message: "Email não cadastrado no sistema" });
+    }
+
     const team = await Team.find(params.teamId);
     const invitation = await team.invitations().create({
       message: data.message,
