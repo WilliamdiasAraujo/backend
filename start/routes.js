@@ -16,8 +16,8 @@
 /** @type {typeof import('@adonisjs/framework/src/Route/Manager')} */
 const Route = use("Route");
 
-Route.get("/", () => {
-  return { greeting: "Hello world in JSON and it worked!" };
+Route.get("/", ({ view }) => {
+  return view.render("privacy-policy");
 });
 
 Route.post("users/forgot", "UserController.forgot");
